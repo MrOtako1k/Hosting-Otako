@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسعار استضافة SA-MP - مقارنة الخوادم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        .filters {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        select, input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .hosting-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .hosting-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hosting-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .hosting-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .provider-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .provider-name::before {
+            content: '🎮';
+            font-size: 1.2em;
+        }
+
+        .plan-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .plan-name {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .spec {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .spec::before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .price .currency {
+            font-size: 0.7em;
+            color: #7f8c8d;
+        }
+
+        .features {
+            margin-bottom: 20px;
+        }
+
+        .features h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 5px 0;
+            color: #495057;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .features li::before {
+            content: '→';
+            position: absolute;
+            right: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .popular {
+            position: relative;
+        }
+
+        .popular::after {
+            content: 'الأكثر شعبية';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .comparison-table {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .comparison-table h3 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hosting-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 أسعار استضافة SA-MP</h1>
+            <p>مقارنة أفضل خوادم استضافة San Andreas Multiplayer</p>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>عدد اللاعبين:</label>
+                <select id="playersFilter">
+                    <option value="">جميع الخطط</option>
+                    <option value="150">150 لاعب</option>
+                    <option value="300">300 لاعب</option>
+                    <option value="1000">1000 لاعب</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="hosting-grid" id="hostingGrid">
+            <!-- سيتم ملء البطاقات بواسطة JavaScript -->
+        </div>
+
+        <div class="comparison-table">
+            <h3>جدول المقارنة السريعة</h3>
+            <table id="comparisonTable">
+                <thead>
+                    <tr>
+                        <th>المزود</th>
+                        <th>الخطة</th>
+                        <th>اللاعبين</th>
+                        <th>الذاكرة</th>
+                        <th>المعالج</th>
+                        <th>التخزين</th>
+                        <th>قاعدة البيانات</th>
+                        <th>اللوحة</th>
+                        <th>السعر</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonBody">
+                    <!-- سيتم ملء الجدول بواسطة JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const hostingData = [
+            {
+                provider: "SA-MP Host",
+                plan: "LITE",
+                players: 150,
+                ram: "2GB DDR4",
+                cpu: "2V CPU",
+                storage: "UNLIMITED",
+                database: "1XDB",
+                panel: "OGP",
+                location: "US",
+                price: 2,
+                priceDh: 20,
+                features: ["OGP Panel", "150 Player Slots", "2GB DDR4 RAM", "Unlimited Storage", "1 Database"],
+                popular: false
+            },
+            {
+                provider: "SA-MP Host",
+                plan: "NORMAL",
+                players: 300,
+                ram: "3GB DDR4",
+                cpu: "3V CPU",
+                storage: "UNLIMITED",
+                database: "1XDB",
+                panel: "OGP",
+                location: "EU",
+                price: 3,
+                priceDh: 30,
+                features: ["OGP Panel", "300 Player Slots", "3GB DDR4 RAM", "Unlimited Storage", "1 Database"],
+                popular: true
+            },
+            {
+                provider: "SA-MP Host",
+                plan: "VIP",
+                players: 1000,
+                ram: "4GB DDR4",
+                cpu: "4V CPU",
+                storage: "UNLIMITED",
+                database: "1XDB",
+                panel: "OGP",
+                location: "ME",
+                price: 4,
+                priceDh: 40,
+                features: ["OGP Panel", "1000 Player Slots", "4GB DDR4 RAM", "Unlimited Storage", "1 Database"],
+                popular: false
+            }
+        ];
+
+        function createHostingCard(data) {
+            const popularClass = data.popular ? 'popular' : '';
+            
+            return `
+                <div class="hosting-card ${popularClass}" data-players="${data.players}" data-location="${data.location}" data-price="${data.price}">
+                    <div class="provider-name">${data.provider}</div>
+                    <div class="plan-info">
+                        <div class="plan-name">خطة ${data.plan}</div>
+                        <div class="specs">
+                            <div class="spec">حتى ${data.players} لاعب</div>
+                            <div class="spec">ذاكرة ${data.ram}</div>
+                            <div class="spec">معالج ${data.cpu}</div>
+                            <div class="spec">تخزين ${data.storage}</div>
+                            <div class="spec">قاعدة بيانات ${data.database}</div>
+                            <div class="spec">لوحة ${data.panel}</div>
+                        </div>
+                    </div>
+                    <div class="price">
+                        ${data.price} <span class="currency">/ شهرياً</span><br>
+                        <span style="font-size: 0.8em; color: #667eea;">${data.priceDh} درهم</span>
+                    </div>
+                    <div class="features">
+                        <h4>المميزات:</h4>
+                        <ul>
+                            ${data.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <button class="btn" onclick="orderNow('${data.provider}', '${data.plan}')">
+                        اطلب الآن
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderHostingCards(data = hostingData) {
+            const grid = document.getElementById('hostingGrid');
+            grid.innerHTML = data.map(createHostingCard).join('');
+        }
+
+        function renderComparisonTable(data = hostingData) {
+            const tbody = document.getElementById('comparisonBody');
+            tbody.innerHTML = data.map(item => `
+                <tr>
+                    <td><strong>${item.provider}</strong></td>
+                    <td>${item.plan}</td>
+                    <td>${item.players}</td>
+                    <td>${item.ram}</td>
+                    <td>${item.cpu}</td>
+                    <td>${item.storage}</td>
+                    <td>${item.antiDDoS}</td>
+                    <td>${item.panel}</td>
+                    <td><strong>${item.price}</strong></td>
+                </tr>
+            `).join('');
+        }
+
+        function filterData() {
+            const playersFilter = document.getElementById('playersFilter').value;
+
+            let filtered = hostingData.filter(item => {
+                const playersMatch = !playersFilter || item.players >= parseInt(playersFilter);
+                return playersMatch;
+            });
+
+            renderHostingCards(filtered);
+            renderComparisonTable(filtered);
+        }
+
+        function orderNow(provider, plan) {
+            const phoneNumber = "212614130355"; // رقم الواتساب مع كود المغرب
+            const message = `السلام عليكم، أريد طلب خطة ${plan} من SA-MP Host`;
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Event listeners للفلاتر
+        document.getElementById('playersFilter').addEventListener('change', filterData);
+
+        // تحميل البيانات عند بدء التشغيل
+        renderHostingCards();
+        renderComparisonTable();
+    </script>
+</body>
+</html>
